@@ -7,6 +7,8 @@
 // Execute `rustlings hint from_into` or use the `hint` watch subcommand for a
 // hint.
 
+use std::num::ParseIntError;
+
 #[derive(Debug)]
 struct Person {
     name: String,
@@ -14,7 +16,7 @@ struct Person {
 }
 
 // We implement the Default trait to use it as a fallback
-// when the provided string is not convertible into a Person object
+// when the provided st convertible iring is notnto a Person object
 impl Default for Person {
     fn default() -> Person {
         Person {
@@ -40,10 +42,21 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of
 // Person Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
+
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        let sp:Vec<&str> = s.split(',').collect();
+        if sp.len()<2|| sp.len()>2 || sp[0].is_empty(){
+            Person::default()
+        }
+        else {
+            let age = sp[1].parse::<usize>();
+            match age {
+                Ok(e) => Person{name:sp[0].to_string(),age:e},
+                _ => Person::default()
+            }
+        }
     }
 }
 

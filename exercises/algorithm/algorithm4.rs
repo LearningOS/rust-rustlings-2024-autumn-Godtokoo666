@@ -3,7 +3,7 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
+
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
@@ -41,7 +41,7 @@ where
 
 impl<T> BinarySearchTree<T>
 where
-    T: Ord,
+    T: Ord + std::fmt::Display,
 {
 
     fn new() -> Self {
@@ -50,23 +50,74 @@ where
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
+        if self.root.is_none() {
+            self.root=Some(Box::new(TreeNode::<T>::new(value)));
+        }
+        else {
+            self.root.as_mut().unwrap().insert(value)
+        }
     }
 
     // Search for a value in the BST
-    fn search(&self, value: T) -> bool {
+    fn search(&mut self, value: T) -> bool {
         //TODO
-        true
+        if self.root.is_none() {
+            false
+        }
+        else {
+            let mut node = self.root.as_mut().unwrap();
+            if node.value == value {
+                return true
+            }
+            loop {
+                if node.value==value {
+                    return true;
+                }
+                else if value<node.value {
+                    if let Some(left) = node.left.as_mut() {
+                        node = left;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    if let Some(right) = node.right.as_mut() {
+                        node = right;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+        }
     }
 }
 
 impl<T> TreeNode<T>
 where
-    T: Ord,
+    T: Ord + std::fmt::Display,
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
+        if value < self.value {
+            if self.left.is_none() {
+                let node = Box::new(TreeNode::<T>::new(value));
+                self.left = Some(node);
+            }
+            else {
+                self.left.as_mut().unwrap().insert(value);
+            }
+        }
+        else if value > self.value {
+            if self.right.is_none() {
+                let node = Box::new(TreeNode::<T>::new(value));
+                self.right = Some(node);
+            }
+            else {
+                self.right.as_mut().unwrap().insert(value);
+            }
+        }
     }
 }
 
@@ -89,7 +140,7 @@ mod tests {
         bst.insert(2);
         bst.insert(4);
 
-        
+
         assert_eq!(bst.search(5), true);
         assert_eq!(bst.search(3), true);
         assert_eq!(bst.search(7), true);

@@ -2,10 +2,11 @@
 	graph
 	This problem requires you to implement a basic graph functio
 */
-// I AM NOT DONE
+
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
+use std::ptr::addr_eq;
 #[derive(Debug, Clone)]
 pub struct NodeNotInGraph;
 impl fmt::Display for NodeNotInGraph {
@@ -30,15 +31,25 @@ impl Graph for UndirectedGraph {
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
+        let (node, to_node, weight) = edge;
+        if !self.adjacency_table.contains_key(node) {
+            self.add_node(node);
+        }
+        if !self.adjacency_table.contains_key(to_node) {
+            self.add_node(to_node);
+        }
+        self.adjacency_table.get_mut(node).unwrap().push((to_node.to_string(),weight));
+        self.adjacency_table.get_mut(to_node).unwrap().push((node.to_string(),weight));
     }
 }
 pub trait Graph {
     fn new() -> Self;
     fn adjacency_table_mutable(&mut self) -> &mut HashMap<String, Vec<(String, i32)>>;
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>>;
-    fn add_node(&mut self, node: &str) -> bool {
+    fn add_node(&mut self, node: &str)  {
         //TODO
-		true
+        let mut adj_mut = self.adjacency_table_mutable();
+        adj_mut.insert(node.to_string(), Vec::new());
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO

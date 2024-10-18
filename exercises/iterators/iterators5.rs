@@ -11,7 +11,6 @@
 // Execute `rustlings hint iterators5` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 use std::collections::HashMap;
 
@@ -35,7 +34,17 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
 fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
     // map is a hashmap with String keys and Progress values.
     // map = { "variables1": Complete, "from_str": None, ... }
-    todo!();
+    match value {
+        Progress::Complete=>{
+            map.iter().filter(|&(_,x)|x==&Progress::Complete ).count()
+        },
+        Progress::None =>{
+            map.iter().filter(|&(_,x)|x==&Progress::None ).count()
+        },
+        Progress::Some =>{
+            map.iter().filter(|&(_,x)|x==&Progress::Some ).count()
+        }
+    }
 }
 
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
@@ -54,7 +63,11 @@ fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Pr
     // collection is a slice of hashmaps.
     // collection = [{ "variables1": Complete, "from_str": None, ... },
     //     { "variables2": Complete, ... }, ... ]
-    todo!();
+    match value {
+        Progress::Complete => collection.iter().map(|x|x.iter().filter(|&(_,v)|v==&Progress::Complete).count()).sum(),
+        Progress::None => collection.iter().map(|x|x.iter().filter(|&(_,v)|v==&Progress::None).count()).sum(),
+        Progress::Some => collection.iter().map(|x|x.iter().filter(|&(_,v)|v==&Progress::Some).count()).sum()
+    }
 }
 
 #[cfg(test)]
